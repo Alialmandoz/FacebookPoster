@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
+import java.lang.Thread.State;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
 
@@ -114,18 +115,33 @@ public class Ui extends JFrame {
 		texto.setBounds(5, 5, 267, 80);
 		panel.add(texto);
 		
+
+		JLabel loading = new JLabel("");
+		loading.setIcon(new ImageIcon(Ui.class.getResource("/media/loading.gif")));
+		loading.setBounds(100, 295, 40, 40);
+		contentPane.add(loading);
+		loading.setVisible(false);
+		
+		
 		
 		JButton btnPost = new JButton("");
 		btnPost.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				Publisher publisher = new Publisher();
+//				System.out.println(publisher.isDone());
+//				publisher.shutdown();
+//				System.out.println(publisher.isDone());
+				
+				
 				String comentario = texto.getText();
-				try {
-					Publisher.publicar(toUpload, comentario);
-					System.out.println(comentario);
-				} catch (FacebookException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				publisher.setFoto(toUpload);
+				publisher.setComentario(comentario);
+				Thread thread = new Thread(publisher);
+				thread.start();
+				String caca = thread.getState().toString();
+				System.out.println("The thread has been "+caca);
+				
 			}
 		});
 		btnPost.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -133,15 +149,18 @@ public class Ui extends JFrame {
 		btnPost.setBounds(192, 444, 90, 32);
 		contentPane.add(btnPost);
 		
-		JButton button = new JButton("");
-		button.setIcon(new ImageIcon(Ui.class.getResource("/media/BtnProgramar.png")));
-		button.addActionListener(new ActionListener() {
+		JButton programar = new JButton("");
+		programar.setIcon(new ImageIcon(Ui.class.getResource("/media/BtnProgramar.png")));
+		programar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 			}
 		});
-		button.setHorizontalTextPosition(SwingConstants.CENTER);
-		button.setBounds(6, 444, 90, 32);
-		contentPane.add(button);
+		programar.setHorizontalTextPosition(SwingConstants.CENTER);
+		programar.setBounds(6, 444, 90, 32);
+		contentPane.add(programar);
+		
+		
 		
 		
 	}
